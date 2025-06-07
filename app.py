@@ -8,7 +8,7 @@ def obter_conexao():
     #conexao = sqlite3.connect("banco/clientes.db")
     
     #Meu PC
-    driver = '{SQL Server}'
+    driver = 'ODBC Driver 18 for SQL Server' #'{SQL Server}'
     server = 'PATRICK-NOTE\\SQLEXPRESS'
     data_base = 'SSx'
     user = 'PATRICK-NOTE\\PATRICK'
@@ -25,9 +25,9 @@ def obter_conexao():
         f'DRIVER={driver};'
         f'SERVER={server};'
         f'DATABASE={data_base};'
-        'Trusted_Connection=yes;')
-        #f'UID={user};'
-        #f'PWD={senha};')
+        'Trusted_Connection=yes;') #--> remover isso se for entrar pelo banco externo SSx
+        #f'UID={user};'  --> adicionar se for entrar pelo banco externo ssx
+        #f'PWD={senha};')--> adicionar se for entrar pelo banco externo ssx
     
     print('CONEXAO COM BANCO FEITA...')
 
