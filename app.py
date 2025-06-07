@@ -73,16 +73,17 @@ def obter_clientes():
     return clientes
 
 def filtrar_cliente(termo=''):
+    print(termo)
     conn = obter_conexao()
     cursor = conn.cursor()
     query = """SELECT ID, NOME, IDADE, ATIVO
             FROM clientes
-            WHERE    NOME           LIKE ?
-            OR CAST (ID    AS VARCHAR(20)) LIKE ?
-            OR CAST (IDADE AS VARCHAR(150)) LIKE ?
-            OR CAST (ATIVO AS VARCHAR(1)) LIKE ?  """
+            WHERE    NOME          LIKE ?
+            OR CAST (ID    AS TEXT) LIKE ?
+            OR CAST (IDADE AS TEXT) LIKE ?
+            OR CAST (ATIVO AS TEXT) LIKE ?  """
     
-    cursor.execute(query, f'%{termo}%', f'%{termo}%', f'%{termo}%', f'%{termo}%')
+    cursor.execute(query, (f'%{termo}%', f'%{termo}%', f'%{termo}%', f'%{termo}%'))
     cliente_filtrado = cursor.fetchall()
     clientes = [list(row) for row in cliente_filtrado]  # converte tuplas para listas (JSON serializável)
     conn.close()
