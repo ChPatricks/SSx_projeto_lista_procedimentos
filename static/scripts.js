@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', init);*/
 
 
 async function carregar_clientes() {
-  fetch('http://localhost:5000/api/carregar_clientes')
+  fetch('https://bea1-177-21-141-9.ngrok-free.app/api/carregar_clientes')
     .then(response => response.json())
     .then(data => {
       console.log(data);
