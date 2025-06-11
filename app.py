@@ -45,39 +45,53 @@ def obter_clientes():
 
     conn.close()
 
-    #print(f'----->{clientes}')
     return jsonify(clientes)
 
-def filtrar_cliente(termo=''):
-    try:
-        conn = obter_conexao()
-        cursor = conn.cursor()
-        query = """SELECT ID, NOME, IDADE, ATIVO
-                FROM clientes
-                WHERE    NOME          LIKE ?
-                OR CAST (ID    AS VARCHAR (150)) LIKE ?
-                OR CAST (IDADE AS VARCHAR (150)) LIKE ?
-                OR CAST (ATIVO AS VARCHAR (150)) LIKE ?  """
-        
-        cursor.execute(query, f'%{termo}%', f'%{termo}%', f'%{termo}%', f'%{termo}%')
-        cliente_filtrado = cursor.fetchall()
-        clientes = [list(row) for row in cliente_filtrado]  # converte tuplas para listas (JSON serializável)
-        conn.close()
+@app.route('/api/filtrar_clientes', methods=['GET'])
+def filtrar_cliente():
+    termo = request.args.get('termo', '')
 
-        return clientes,200
-    
-    except Exception as e:
-        print("Erro ao buscar cliente:", e)
-        return {'mensagem': 'Erro na busca de cliente'}, 500
+    conn = obter_conexao()
+    cursor = conn.cursor()
+    query = """SELECT ID, NOME, IDADE, ATIVO
+            FROM clientes
+            WHERE    NOME          LIKE ?
+            OR CAST (ID    AS VARCHAR (150)) LIKE ?
+            OR CAST (IDADE AS VARCHAR (150)) LIKE ?
+            OR CAST (ATIVO AS VARCHAR (150)) LIKE ?  """
+    cursor.execute(query, f'%{termo}%', f'%{termo}%', f'%{termo}%', f'%{termo}%')
 
+    colunas = [col[0] for col in cursor.description]  # ['id', 'nome', 'idade', 'ativo']
+    cliente_filtrado = [dict(zip(colunas, linha)) for linha in cursor.fetchall()] # converte JSON serializável
+    conn.close()
 
+    return jsonify(cliente_filtrado)
+
+@app.route('/api/carregar_procedimentos', methods=['GET'])
 def obter_procedimentos():
     conn = obter_conexao()
     cursor = conn.cursor()
-    cursor.execute("SELECT ID, PROCEDIMENTO, ATIVO FROM TESTE_PROCEDIMENTOS")
-    procedimentos = cursor.fetchall()
+    query = "SELECT ID, PROCEDIMENTO, ATIVO FROM TESTE_PROCEDIMENTOS"
+    cursor.execute(query)
 
-    return procedimentos
+    colunas = [col[0].lower() for col in cursor.description]# ['id', 'procedimento', 'ativo']
+    linhas = cursor.fetchall()
+
+    procedimentos = []
+    for linha in linhas:
+        # cria dict com colunas em lower
+        d = dict(zip(colunas, linha))
+        
+        # transforma o valor da coluna 'procedimento' em maiúscula, se não for None
+        if d['procedimento'] is not None:
+            d['procedimento'] = d['procedimento'].upper()
+        
+        procedimentos.append(d)
+
+    conn.close()
+
+    print(f'--->{procedimentos}')
+    return jsonify(procedimentos)
     
 # Rota principal (exibe o HTML index.html)
 @app.route('/')

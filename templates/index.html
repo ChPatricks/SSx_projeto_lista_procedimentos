@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Autorização</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!--<script src="{{ url_for('static', filename='filtro_clientes.js') }}"></script>-->
-    <script type="module" src="{{ url_for('static', filename='scripts.js') }}"></script>  
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
 </head>
 <body>
   <main>
     <section class="cliente"> <!--Lista de Clientes-->
       <div class="cliente_filtro"> <!--Campo de pesquisas de cliente-->
-        <label for="filtro">Filtro:</label>
-        <input type="text" id="filtro" name="filtro" placeholder="Buscar cliente...">
+        <label for="filtro_cliente">Filtro:</label>
+        <input type="text" id="filtro_cliente" name="filtro_cliente" placeholder="Buscar Pacientes...">
       </div>
       <div class="tabela_titulo">Lista de Pacientes</div>
       <div class="tabela_cliente"> <!--Tabela lista de clientes-->
@@ -35,21 +32,16 @@
     </section>
     <section class="procedimento"><!--Lista de Procedimentos-->
       <form action="app.py" method="post" class="procedimento_formulario">
-        <div class="procedimento_container">
-          {% for procedimento in procedimentos %}
-          <div class="procedimento_caixa">
-            <input type="checkbox" name="cb{{ procedimento[0] }}" id="cb{{ procedimento[0] }}">
-            <label for="cb{{ procedimento[0] }}">{{ procedimento[1] if procedimento[2] else 'PROCEDIMENTO INATIVADO' }}</label>
-          </div>
-          {% endfor %}
+        <div id="procedimento_container" class="procedimento_container">
+          <!-- JS vai preencher aqui -->
         </div>
         <div class="procedimento_botoes">
           <input type="submit" value="Gerar Assinatura">
           <input type="reset" value="Limpar Tudo">
         </div>
-        
       </form>
     </section>
   </main>
+  <script type="module" src="{{ url_for('static', filename='scripts.js') }}"></script> 
 </body>
 </html>
