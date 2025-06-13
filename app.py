@@ -96,27 +96,7 @@ def obter_procedimentos():
 # Rota principal (exibe o HTML index.html)
 @app.route('/')
 def index():  
-#    clientes = obter_clientes()
-#    procedimentos = obter_procedimentos()
-#
-#    procedimentos_apurado = []
-#    for procedimento in procedimentos:
-#        if procedimento[2]:
-#            procedimentos_apurado.append(procedimento)
-#
-#    dados = {
-#        'clientes':clientes,
-#        'procedimentos': procedimentos_apurado
-#    }
-
     return render_template('index.html')#, **dados)
-
-# Rota chamada via JavaScript (AJAX)
-#@app.route('/filtro_clientes')
-#def filtrar():
-#    termo = request.args.get('termo', '')  # recebe o termo da URL
-#    clientes_filtrados = filtrar_cliente(termo)
-#    return jsonify(clientes_filtrados)  # retorna JSON para o JS
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

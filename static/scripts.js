@@ -1,6 +1,11 @@
 
+function obter_baseUrl() {
+  const baseUrl = 'https://cf2b-177-21-141-9.ngrok-free.app'
+  return String(baseUrl)
+}
+
 async function carregar_clientes(termo = '') {
-  const baseUrl = 'https://dc13-177-21-141-9.ngrok-free.app'; /*url base do ngrok */
+  let  baseUrl = obter_baseUrl(); /*url base do ngrok */
   const endpoint = termo.trim()
     ? `/api/filtrar_clientes?termo=${encodeURIComponent(termo)}` /*se houver conteudo de input no filtro */
     : '/api/carregar_clientes'; // rota que carrega todos (else)
@@ -40,32 +45,33 @@ async function carregar_clientes(termo = '') {
 }
 
 async function carregar_procedimentos() {
-    const baseUrl = 'https://dc13-177-21-141-9.ngrok-free.app/api/carregar_procedimentos';
+  let baseUrl = obter_baseUrl();
+  const endpoint = '/api/carregar_procedimentos'
 
-    const response = await fetch(baseUrl);
-    const dados = await response.json();
-    console.log(dados)
+  const response = await fetch(baseUrl + endpoint);
+  const dados = await response.json();
+  console.log(dados)
 
-    const container = document.getElementById('procedimento_container');
-    container.innerHTML = ''; // Limpa antes de preencher
+  const container = document.getElementById('procedimento_container');
+  container.innerHTML = ''; // Limpa antes de preencher
 
-    dados.forEach(procedimento => {
-      const caixa = document.createElement('div');
-      caixa.className = 'procedimento_caixa';
+  dados.forEach(procedimento => {
+    const caixa = document.createElement('div');
+    caixa.className = 'procedimento_caixa';
 
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.name = `cb${procedimento.id}`;
-      input.id = `cb${procedimento.id}`;
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.name = `cb${procedimento.id}`;
+    input.id = `cb${procedimento.id}`;
 
-      const label = document.createElement('label');
-      label.setAttribute('for', input.id);
-      label.textContent = procedimento.ativo ? procedimento.procedimento : 'PROCEDIMENTO INATIVADO';
+    const label = document.createElement('label');
+    label.setAttribute('for', input.id);
+    label.textContent = procedimento.ativo ? procedimento.procedimento : 'PROCEDIMENTO INATIVADO';
 
-      caixa.appendChild(input);
-      caixa.appendChild(label);
+    caixa.appendChild(input);
+    caixa.appendChild(label);
 
-      container.appendChild(caixa);
+    container.appendChild(caixa);
     });
   }
 
